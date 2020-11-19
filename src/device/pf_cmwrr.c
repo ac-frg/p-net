@@ -331,6 +331,7 @@ int pf_cmwrr_rm_write_ind (
       p_result->pnio_status.error_decode = PNET_ERROR_DECODE_PNIORW;
       p_result->pnio_status.error_code_1 = PNET_ERROR_CODE_1_ACC_STATE_CONFLICT;
       break;
+   case PF_CMWRR_STATE_PRMEND:
    case PF_CMWRR_STATE_STARTUP:
       if (p_ar->ar_state == PF_AR_STATE_BACKUP)
       {
@@ -349,11 +350,6 @@ int pf_cmwrr_rm_write_ind (
             p_req_pos,
             p_result);
       }
-      break;
-   case PF_CMWRR_STATE_PRMEND:
-      p_result->pnio_status.error_code = PNET_ERROR_CODE_PNIO;
-      p_result->pnio_status.error_decode = PNET_ERROR_DECODE_PNIORW;
-      p_result->pnio_status.error_code_1 = PNET_ERROR_CODE_1_ACC_STATE_CONFLICT;
       break;
    case PF_CMWRR_STATE_DATA:
       if (p_ar->ar_state == PF_AR_STATE_BACKUP)
