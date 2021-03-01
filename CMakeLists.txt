@@ -13,7 +13,7 @@
 # full license information.
 #*******************************************************************/
 
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.7)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 project (PROFINET VERSION 0.1.0)
 
@@ -150,8 +150,9 @@ configure_file (
 
 # Add platform-dependent targets early, so they can be configured by
 # platform
+
 add_library(profinet "")
-add_executable(pn_dev "")
+#add_executable(pn_dev "")
 
 if (BUILD_TESTING)
   add_executable(pf_test "")
@@ -181,12 +182,12 @@ target_include_directories(profinet
 install (
   TARGETS profinet
   EXPORT ProfinetConfig
-  DESTINATION lib
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
 
 install(
   EXPORT ProfinetConfig
-  DESTINATION cmake
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake
   )
 
 install (FILES
@@ -196,7 +197,6 @@ install (FILES
   )
 
 add_subdirectory (src)
-add_subdirectory (sample_app)
 
 if (BUILD_TESTING)
   add_subdirectory (test)

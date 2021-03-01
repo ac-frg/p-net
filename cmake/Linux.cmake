@@ -17,9 +17,9 @@ option (USE_SCHED_FIFO
   "Use SCHED_FIFO policy. May require extra privileges to run"
   OFF)
 
-if (USE_SCHED_FIFO)
-  add_compile_definitions(USE_SCHED_FIFO)
-endif()
+#if (USE_SCHED_FIFO)
+#  add_compile_definitions(USE_SCHED_FIFO)
+#endif()
 
 target_include_directories(profinet
   PRIVATE
@@ -39,6 +39,8 @@ target_compile_options(profinet
   -Wextra
   -Werror
   -Wno-unused-parameter
+  -O0
+  -ggdb
   INTERFACE
   $<$<CONFIG:Coverage>:--coverage>
   )
@@ -51,16 +53,16 @@ target_link_libraries(profinet
   $<$<CONFIG:Coverage>:--coverage>
   )
 
-target_include_directories(pn_dev
-  PRIVATE
-  src/osal/linux
-  )
-
-target_sources(pn_dev
-  PRIVATE
-  sample_app/sampleapp_common.c
-  sample_app/main_linux.c
-  )
+#target_include_directories(pn_dev
+#  PRIVATE
+#  src/osal/linux
+#  )
+#
+#target_sources(pn_dev
+#  PRIVATE
+#  sample_app/sampleapp_common.c
+#  sample_app/main_linux.c
+#  )
 
 file(COPY
   src/osal/linux/set_network_parameters
