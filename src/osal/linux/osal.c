@@ -744,24 +744,6 @@ uint8_t os_buf_header (os_buf_t * p, int16_t header_size_increment)
    return 255;
 }
 
-/** @internal
- * Convert IPv4 address to string
- * @param ip               In: IP address
- * @param outputstring     Out: Resulting string. Should have length
- * OS_INET_ADDRSTRLEN.
- */
-static void os_ip_to_string (os_ipaddr_t ip, char * outputstring)
-{
-   snprintf (
-      outputstring,
-      OS_INET_ADDRSTRLEN,
-      "%u.%u.%u.%u",
-      (uint8_t) ((ip >> 24) & 0xFF),
-      (uint8_t) ((ip >> 16) & 0xFF),
-      (uint8_t) ((ip >> 8) & 0xFF),
-      (uint8_t) (ip & 0xFF));
-}
-
 int os_set_ip_suite (
    const char * interface_name,
    os_ipaddr_t * p_ipaddr,
@@ -770,44 +752,12 @@ int os_set_ip_suite (
    const char * hostname,
    bool permanent)
 {
-   char ip_string[OS_INET_ADDRSTRLEN];
-   char netmask_string[OS_INET_ADDRSTRLEN];
-   char gateway_string[OS_INET_ADDRSTRLEN];
-   char * permanent_string;
-   char * outputcommand;
-   int textlen = -1;
-   int status = -1;
-
-   os_ip_to_string (*p_ipaddr, ip_string);
-   os_ip_to_string (*p_netmask, netmask_string);
-   os_ip_to_string (*p_gw, gateway_string);
-   permanent_string = permanent ? "1" : "0";
-
-   textlen = asprintf (
-      &outputcommand,
-      "./set_network_parameters %s %s %s %s '%s' %s",
-      interface_name,
-      ip_string,
-      netmask_string,
-      gateway_string,
-      hostname,
-      permanent_string);
-   if (textlen < 0)
-   {
-      return -1;
-   }
-
-   os_log (
-      LOG_LEVEL_DEBUG,
-      "Command for setting network parameters: %s\n",
-      outputcommand);
-
-   status = system (outputcommand);
-   free (outputcommand);
-   if (status != 0)
-   {
-      return -1;
-   }
+   (void) interface_name;
+   (void) p_ipaddr;
+   (void) p_netmask;
+   (void) p_gw;
+   (void) hostname;
+   (void) permanent;
    return 0;
 }
 
