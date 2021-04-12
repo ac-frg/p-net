@@ -39,8 +39,7 @@ target_compile_options(profinet
   -Wextra
   -Werror
   -Wno-unused-parameter
-  -O0
-  -ggdb
+  -O2
   INTERFACE
   $<$<CONFIG:Coverage>:--coverage>
   )
