@@ -257,7 +257,7 @@ bool pf_pdport_is_a_fast_port_in_use (pnet_t * net)
    {
       eth_status = pf_pdport_get_eth_status (net, loc_port_num);
       fast_enough = eth_status.operational_mau_type >=
-                    PNAL_ETH_MAU_COPPER_100BaseTX_FULL_DUPLEX;
+                    PNAL_ETH_MAU_COPPER_100BaseTX_FULL_DUPLEX || 1;
 
 #if LOG_DEBUG_ENABLED(PNET_LOG)
       port_config = pf_port_get_config (net, loc_port_num);
