@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 
 struct pnal_eth_handle
@@ -304,6 +305,7 @@ pnal_eth_handle_t * pnal_eth_init (
 
 void pnal_eth_exit (pnal_eth_handle_t * handle)
 {
+   // stop the thread, wait for it to join
    pnal_eth_set_stop (handle);
    int ret = os_thread_join (handle->thread);
    if (ret != 0)
@@ -315,6 +317,11 @@ void pnal_eth_exit (pnal_eth_handle_t * handle)
          ret);
    }
    os_mutex_destroy (handle->stop_mutex);
+
+   // and afterwards close the socket (this is all in the same thread, hopefully)
+   close (handle->socket);
+   handle->socket = -1;
+
    if (handle->thread != NULL)
    {
       free (handle->thread);
@@ -327,6 +334,11 @@ void pnal_eth_exit (pnal_eth_handle_t * handle)
 
 int pnal_eth_send (pnal_eth_handle_t * handle, pnal_buf_t * buf)
 {
-   int ret = send (handle->socket, buf->payload, buf->len, 0);
-   return ret;
+   // if this was scheduled before exit was called, handle and socket could be
+   // gone, it might be best to double check if the pointers are still valid.
+   if (handle && handle->socket > -1)
+   {
+      return send (handle->socket, buf->payload, buf->len, 0);
+   }
+   return -1;
 }
