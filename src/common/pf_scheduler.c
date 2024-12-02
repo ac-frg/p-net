@@ -489,11 +489,14 @@ void pf_scheduler_tick (pnet_t * net)
       /* Unlink from busy list */
       pf_scheduler_unlink (net, &net->scheduler_timeout_first, ix);
 
+      #pragma GCC diagnostic ignored "-Warray-bounds"
+      // This is safe, as the index is checked above.
       ftn = net->scheduler_timeouts[ix].cb;
       arg = net->scheduler_timeouts[ix].arg;
 
       /* Insert into free list. */
       net->scheduler_timeouts[ix].in_use = false;
+      #pragma GCC diagnostic pop
       pf_scheduler_link_before (
          net,
          &net->scheduler_timeout_free,
